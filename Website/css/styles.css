@@ -1,0 +1,84 @@
+/* import de la police montserrat */
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap);
+/* import de la police montserrat */
+@import url(https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap);
+
+* {
+    font-family: 'Montserrat';
+}
+
+/* scroll agréable */
+html {
+    scroll-behavior: smooth;
+}
+
+/* tete de page */
+header.header {
+    /*centrer sur la ligne horizontale */
+    align-items: center;
+    justify-content: space-around;
+    /* enlève les puces */
+    width: auto;
+    /* flex, a coté  */
+    display: flex;  
+}
+/* largeur de l'image en tête */
+header.header img {
+    width: 50px;
+}
+/*pour un fon d'écran*/
+section.top-page {
+    height: 40px;
+    width: auto;
+    justify-content: center;
+    padding: 10px;
+    border: solid 1.5px black;
+}
+
+body {
+    padding: 0;
+    margin:3px;
+}
+html, body, #map {
+    height:  95%;
+    z-index: 0;
+}
+header, a.big-title {
+    color: black;
+    font-size: 30px;
+    font-family: 'Abril FatFace', cursive;
+}
+footer {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    height: 20px;
+    font-weight:500;
+    font-variant: small-caps 600%;
+}
+
+#locate-position{
+    position:absolute;
+    top: 150px;
+    z-index: 100;
+    margin-left: 12px;
+    font-size: 20px;
+    background: white;
+    width: 30px;
+    height: 30px;
+    box-shadow: 0px 0px 0px 2px rgba(0, 0, 0,0.2);
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+footer a.cgv {
+    height: 20px;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    justify-content:space-around;
+    color: black;
+}

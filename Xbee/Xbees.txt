@@ -1,0 +1,39 @@
+Coord : 0013A20041C8897B
+
+coord abdel : 0013A20041BC1DA9
+
+Arduino1 : 0013A20041CD8283
+
+Arduino1 abdel : 0013A20041BF0844
+
+ni=PI=coord:
+CE = 1
+JV=0
+
+ni=Arduino1=router:
+// yo depuis arduino= 7E 00 1F 10 01 00 13 A2 00 41 C8 89 7B FF FE 00 00 59 6F 20 64 65 70 75 69 73 20 61 72 64 75 69 6E 6F AB
+CE = 0
+JV=1
+
+
+
+Both :
+AP=1
+ID=2015
+CH=15
+SP=1F4
+SC=7FFF (pas digi)
+NT=0 2secs
+BD=(57600)
+
+
+Les pins 0 et 1 (Tx et Rx) de l'arduino servent au Serial de communication USB avec le PC.
+
+Tu ne peux pas te servir de ces 2 pins pour brancher un Xbee et tout en continuant d'utiliser la liaison avec le PC.
+
+Zigbee: peut pas changer le channel
+
+DigiMesh
+
+remove xbee for ptogramming
+P/S: I just want to remind again that you cannot communicate either XBee or Bluebee with PC (through HyperTerminal or XCTU) if your jumper is at either D1D0, D3D2, D9D8 or D11D10. You can try it out.

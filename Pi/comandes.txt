@@ -1,0 +1,32 @@
+en ssh :
+
+le login par défaut est « pi », et le password est « 123456789 ».
+cd Desktop
+cd --
+ouvrir code : sudo nano fichier.py
+afficher les progtammes : ls
+lancer un programme : python3 programme.py
+Stopper un prgm en cours : ctrl c (stop prgm)
+eteindre : sudo shutdown -h now
+
+sudo python3 -m pip install xbee
+
+port xbee : /dev/ttyUSB0
+
+ordi:
+pyhton -m pip 
+python -m ensurepip
+python -m pip install numpy
+
+Lancer prgm automatiquement sur le raspberry :
+COMMANDES:
+cd Desktop
+pwd
+cd /
+Verifier : / $ 
+sudo nano etc/profile
+Mettre à la fin :sudo python /home/pi/Desktop/PI.py
+sudo raspi-config
+System option
+S5
+Console Autologin Text console, automatically logged in as 'pi' user
