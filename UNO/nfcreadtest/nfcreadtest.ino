@@ -1,4 +1,5 @@
 //Teste d'abord exactement ce code, ensuite tu devrais pouvoir supprimer des parties si ca marche 
+
 #include <Wire.h>
 #include <PN532_I2C.h>
 #include <PN532.h>   // The following files are included in the libraries Installed
