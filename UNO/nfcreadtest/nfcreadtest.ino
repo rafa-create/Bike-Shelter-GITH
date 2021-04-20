@@ -61,7 +61,7 @@ void loop(void) {
         String uid = record.getId(); 
         if (uid != "") {
         Serial.print("  ID: ");Serial.println(uid); // Prints the Unique Identification of the NFC Tag 
-//Jusque là (à tester)
+//Jusque là (pas sur : à tester)
         }
       }
     }
