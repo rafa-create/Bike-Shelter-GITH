@@ -1,4 +1,4 @@
-//code a tester
+//Teste d'abord exactement ce code, ensuite tu devrais pouvoir supprimer des parties si ca marche 
 #include <Wire.h>
 #include <PN532_I2C.h>
 #include <PN532.h>   // The following files are included in the libraries Installed
@@ -14,14 +14,15 @@ void setup(void) {
 }
 
 void loop(void) {
-  Serial.println("\nScan your NFC tag on the NFC Shield\n");  // Command so that you an others will know what to do 
+  Serial.println("\nScan your NFC tag on the NFC Shield\n");  // Affichage pour l'utilisateur 
 
   if (nfc.tagPresent())
   {
     NfcTag tag = nfc.read();
     Serial.println(tag.getTagType());
     Serial.print("UID: ");Serial.println(tag.getUidString()); // Retrieves the Unique Identification from your tag
-
+    
+//Je pense qu'on poura supprimer cette partie si ca marche :
     if (tag.hasNdefMessage()) // If your tag has a message
     {
 
@@ -33,7 +34,6 @@ void loop(void) {
         Serial.print("s");
       }
       Serial.println(".");
-
       // If you have more than 1 Message then it wil cycle through them
       int recordCount = message.getRecordCount();
       for (int i = 0; i < recordCount; i++)
@@ -54,9 +54,9 @@ void loop(void) {
         Serial.println(payloadAsString);
 
 
-        String uid = record.getId();
+        String uid = record.getId(); // uid est la seule variable intéressante !!
         if (uid != "") {
-          Serial.print("  ID: ");Serial.println(uid); // Prints the Unique Identification of the NFC Tag
+        Serial.print("  ID: ");Serial.println(uid); // Prints the Unique Identification of the NFC Tag 
         }
       }
     }
