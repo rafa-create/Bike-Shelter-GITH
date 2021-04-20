@@ -1,6 +1,9 @@
 //Teste d'abord exactement ce code, ensuite tu devrais pouvoir supprimer des parties si ca marche 
+
 // les librairies : https://github.com/don/NDEF.git et https://github.com/Seeed-Studio/PN532.git
 //download zip  ...  extracter ... mettre dans C:\Users\Tobias\Documents\Arduino\libraries  ...
+//Pour PN532 : penser à sortir les fichiers du dossier avant de les mettres dans "librairie"
+
 #include <Wire.h> 
 #include <PN532_I2C.h> 
 #include <PN532.h>   // The following files are included in the libraries Installed
