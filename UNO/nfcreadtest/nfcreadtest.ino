@@ -55,9 +55,10 @@ void loop(void) {
         Serial.println(payloadAsString);
 
 
-        String uid = record.getId(); // uid est la seule variable intéressante !!
+        String uid = record.getId(); 
         if (uid != "") {
         Serial.print("  ID: ");Serial.println(uid); // Prints the Unique Identification of the NFC Tag 
+//Jusque là (à tester)
         }
       }
     }
