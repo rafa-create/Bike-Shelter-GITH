@@ -48,7 +48,7 @@ $minutes=date('i');
                     minZoom: 1,
                     maxZoom: 20
                 }).addTo(macarte);
-                // marquer
+                // Ici pour ajouter un nouvel abri-vélos :
                 var marker = L.marker([lat, lon]).addTo(macarte);
                 L.marker([lat-0.00201, lon-0.00301]).addTo(macarte)
                 .bindPopup('<b><a href="https://goo.gl/maps/UeHD5ghRZWAA1zsd6">Abri fictif 1 :</a></b><br><b>0 place libre</b><br><i>Actualisé à <?= $heures;?>h<?= $minutes;?></i>')
