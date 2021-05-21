@@ -1,15 +1,20 @@
 import requests
 
 def UL_Card(CSN):#en str
-    CSN = ''.join(CSN.split())
-    url = "https://api-public.univ-lorraine.fr/annuaire/cards/check/"+CSN
-    payload={}
-    headers = {
+    try:
+        CSN = ''.join(CSN.split())
+        url = "https://api-public.univ-lorraine.fr/annuaire/cards/check/"+CSN
+        payload={}
+        headers = {
   'X-Gravitee-Api-Key': 'd8cf4b89-af20-4aeb-a143-4898bdd9f4a2',
   'id': 'd8cf4b89af204aeba1434898bdd9f4a2'
 }
-    response = requests.request("GET", url, headers=headers, data=payload)
-    return response.status_code==200
+        response = requests.request("GET", url, headers=headers, data=payload)
+        return response.status_code==200
+    except requests.exceptions.RequestException as e :
+        print("pas internet")
+        return True
+
 
 def update_fichier_et_online(Ap):
     try :
