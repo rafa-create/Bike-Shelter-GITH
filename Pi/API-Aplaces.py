@@ -1,13 +1,28 @@
 import requests
 
-Ap=10
-url = 'http://localhost/api.php?Aplaces='+str(Ap)
-payload={}
-headers = {
+def update_fichier_et_online(Ap):
+    try :
+        f = open("C:/Users/Rafael/Documents/Cours/UE proj+com+manag/Projet 1A 60%/Bike-Shelter-GITH/Pi/App.txt","w")
+        f.write(str(Ap))
+        f.close()
+        url = 'http://localhost/api.php?Aplaces='+str(Ap)
+        payload={}
+        headers = {
   'Authorization': 'Bearer jadorelevelo'
 }
+        response = requests.request("GET", url, headers=headers, data=payload)
+        #print(response.status_code)
+        print(response.text)
 
-response = requests.request("GET", url, headers=headers, data=payload)
+    except requests.exceptions.RequestException as e :
+        #ConnectionError
+        print("Mise en ligne non effectuée")
+def recup_App():
+    global Ap
+    f = open('C:/Users/Rafael/Documents/Cours/UE proj+com+manag/Projet 1A 60%/Bike-Shelter-GITH/Pi/App.txt','r')
+    Ap = f.read()
+    Ap=int(str(Ap))
+    f.close()
 
-#print(response.status_code)
-print(response.text)
+recup_App()
+update_fichier_et_online(Ap)
