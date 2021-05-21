@@ -3,7 +3,6 @@
 $Aplaces=file_get_contents(__DIR__.DIRECTORY_SEPARATOR."places.txt");
 $heures= date('H')+2 ;
 $minutes=date('i');
-//Place:: 
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +28,7 @@ $minutes=date('i');
     <div id="map"></div>
     <a type="button" id="locate-position" onClick="javascript:getLocationLeaflet();" title="Me localiser"><i class="fa fa-map-marker" aria-hidden="true" ></i></a>     
     <footer>
-        <p class="copyright">&copy; 2021 - ENSEM </p>
+        <a href= "https://ensem.univ-lorraine.fr/" class="copyright">&copy; 2021 - ENSEM </a>
         <a href="contact.html" class="cgv">Contact</a>
     </footer>
     <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
@@ -48,7 +47,7 @@ $minutes=date('i');
                     minZoom: 1,
                     maxZoom: 20
                 }).addTo(macarte);
-                // Ici pour ajouter un nouvel abri-vélos :
+                // marquer
                 var marker = L.marker([lat, lon]).addTo(macarte);
                 L.marker([lat-0.00201, lon-0.00301]).addTo(macarte)
                 .bindPopup('<b><a href="https://goo.gl/maps/UeHD5ghRZWAA1zsd6">Abri fictif 1 :</a></b><br><b>0 place libre</b><br><i>Actualisé à <?= $heures;?>h<?= $minutes;?></i>')
