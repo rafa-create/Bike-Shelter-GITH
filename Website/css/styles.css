@@ -20,41 +20,34 @@ header.header {
     /* enlève les puces */
     width: auto;
     /* flex, a coté  */
-    display: flex;  
+    display: flex;
 }
 /* largeur de l'image en tête */
 header.header img {
     width: 50px;
 }
-/*pour un fon d'écran*/
 section.top-page {
-    height: 40px;
     width: auto;
     justify-content: center;
-    padding: 10px;
+    padding: 1px;
     border: solid 1.5px black;
 }
 
 body {
     padding: 0;
     margin:3px;
+    height: 100%;
 }
-html, body, #map {
-    height:  95%;
+
+html,body, #map {
+    margin:0.5px;
     z-index: 0;
+    height: 94.5%;
 }
 header, a.big-title {
     color: black;
     font-size: 30px;
     font-family: 'Abril FatFace', cursive;
-}
-footer {
-    display: flex;
-    justify-content:space-around;
-    align-items: center;
-    height: 20px;
-    font-weight:500;
-    font-variant: small-caps 600%;
 }
 
 #locate-position{
@@ -74,7 +67,30 @@ footer {
     cursor: pointer;
   }
 
+footer {
+    
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    height: 20px;
+    font-weight:500;
+    font-variant: small-caps 600%;
+    border: solid 1.5px black;
+    z-index: 0;
+    bottom: 0;    
+    background-color:white;
+}
+
 footer a.cgv {
+    height: 20px;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    justify-content:space-around;
+    color: black;
+} 
+
+footer a.copyright {
     height: 20px;
     text-decoration: none;
     align-items: center;
