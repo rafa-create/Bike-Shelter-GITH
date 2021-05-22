@@ -1,11 +1,3 @@
- 
- /*RST/Reset   RST          9             5         D9         RESET/ICSP-5     RST
- * SPI SS      SDA(SS)      10            53        D10        10               10
- * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
- * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14
- * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
- */
- 
 #include <MFRC522.h>//carte
 #include <SPI.h>//carte
  
@@ -39,15 +31,12 @@ void setup()
 }
 void loop() {
   digitalWrite(LED_Y, LOW);
-  int statelock1=digitalRead(lock1);
-  static String cardlock1= "nothing";
-  if (statelock1==0 && cardlock1== "nothing"){
+  if (statelock1==0){//verrou utilisé
     digitalWrite(LED_Y, HIGH); 
     //tone(BUZZER, 600);
     // Look for new cards
     if ( ! mfrc522.PICC_IsNewCardPresent()) { return;}
     if ( ! mfrc522.PICC_ReadCardSerial()){return;}
-    Serial.print("Card ID :");
     String content= "";
     byte letter;
     for (byte i = 0; i < mfrc522.uid.size; i++) 
@@ -55,16 +44,16 @@ void loop() {
       Serial.print(mfrc522.uid.uidByte[i], HEX);
       content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
       content.concat(String(mfrc522.uid.uidByte[i], HEX));}
-    Serial.println();
-    Serial.print("Student card: ");
+    Serial.print("Carte UL et pas CSN courant ?");
     content.toUpperCase();
-    if (content.substring(1).length()==20 ||content.substring(1).length() =="04 33 5B B2 7A 57 80") {
-      cardlock1 = content.substring(1);
-      digitalWrite(LED_Y, LOW); 
+    if(Serial.available()>0)
+  { uart_rx_buf=char(Serial.read());
+  Serial.print(uart_rx_buf);
+  Serial.write(Serial.read());
+    if(uart_rx_buf=='True')
+    { digitalWrite(LED_Y, LOW); 
       noTone(BUZZER);
       digitalWrite(LED_Y, LOW);
-      Serial.println(" Yes, so registred a this lock");
-      Serial.println();
       delay(500);
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
@@ -72,10 +61,11 @@ void loop() {
       noTone(BUZZER);
       delay(3000);
       digitalWrite(LED_G, LOW);
+      Serial.println("Velo gare !");
       }
     else   {
       noTone(BUZZER);
-      Serial.println(" No, so lock ejected");
+      Serial.println("Pas carte UL ou dans CSN courant donc verrou éjécté");
       Serial.println();
       digitalWrite(LED_R, HIGH);          
       tone(BUZZER, 300);
@@ -98,13 +88,13 @@ void loop() {
       Serial.print(mfrc522.uid.uidByte[i], HEX);
       content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
       content.concat(String(mfrc522.uid.uidByte[i], HEX));}
-    Serial.println();
-    Serial.print("Do you have a bike locked ?");
     content.toUpperCase();
-    if (content.substring(1) ==cardlock1) {
-      Serial.println(" Yes, so lock ejected");
-      Serial.println();
-      digitalWrite(LED_G, HIGH);
+    Serial.print("CSN courant ?");
+    if(Serial.available()>0)
+  { uart_rx_buf=char(Serial.read());
+  Serial.write(Serial.read());
+    if(uart_rx_buf==true)
+    { digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
       delay(300);
       noTone(BUZZER);
@@ -112,13 +102,15 @@ void loop() {
       delay(2000);
       digitalWrite(Relay1, LOW);
       digitalWrite(LED_G, LOW);
-      cardlock1= "nothing";}
+      Serial.println("Velo pris !");
+    }
      else   {
-      Serial.println(" No");
-      Serial.println();
       digitalWrite(LED_R, HIGH);          
       tone(BUZZER, 300);
       delay(1000);
       noTone(BUZZER);
-      digitalWrite(LED_R, LOW);}
+      digitalWrite(LED_R, LOW);
+      Serial.println("Pas de vélo garé désolé");
+      }
+      uart_rx_buf = 0;//sait pas à quoi ca sert
 }
