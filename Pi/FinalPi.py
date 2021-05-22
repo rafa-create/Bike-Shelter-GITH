@@ -1,4 +1,9 @@
 import requests
+import serial, sys
+from xbee import XBee
+#SERIALPORT = "/dev/ttyUSB0"
+#BAUDRATE=57600
+#ser  = serial.Serial(SERIALPORT, BAUDRATE)
 
 def UL_Card(CSN):#en str
     try:
@@ -12,10 +17,8 @@ def UL_Card(CSN):#en str
         response = requests.request("GET", url, headers=headers, data=payload)
         return response.status_code==200
     except requests.exceptions.RequestException as e :
-        print("pas internet")
+        print("Pas de check de CSN effectué")
         return True
-
-
 def update_fichier_et_online(Ap):
     try :
         f = open("C:/Users/Rafael/Documents/Cours/UE proj+com+manag/Projet 1A 60%/Bike-Shelter-GITH/Pi/App.txt","w")
@@ -29,7 +32,6 @@ def update_fichier_et_online(Ap):
         response = requests.request("GET", url, headers=headers, data=payload)
         #print(response.status_code)
         print(response.text)
-
     except requests.exceptions.RequestException as e :
         #ConnectionError
         print("Mise en ligne non effectuée")
@@ -39,6 +41,8 @@ def recup_App():
     Ap = f.read()
     Ap=int(str(Ap))
     f.close()
+    if Ap<0:
+        Ap=0
 
 def check_csn_liste(CSN):
     global cartes
@@ -54,6 +58,7 @@ def check_csn_liste(CSN):
     return False
 
 def sup_csn_liste(CSN):
+
     CSN=str(CSN)
     with open(cartes, "r") as f:
         lines = f.readlines()
@@ -74,10 +79,6 @@ def ajouter_csn(CSN):
     f.write("\n")
     f.write(str(CSN))
     f.close()
-
-CSN="04 43 59 B2 61 67 80"
-#04 43 59 B2 61 67 80
-#04 4C 40 B2 61 67 80
 
 def garer(CSN):
     global Ap
@@ -100,3 +101,27 @@ def prendre(CSN):
         print ("Place libérée")
     else:
         print ("pas de vélo garé")
+
+def conv(data):
+    #surement prendre les 20 premier caractéres pour le CSN et reste pour le msg 
+    CSN="04 4C 40 B2 61 67 80"
+    return CSN,data
+
+"04 43 59 B2 61 67 80"
+"04 4C 40 B2 61 67 80"
+"04 33 5B B2 7A 57 80"
+"""
+while True:
+    data=input(str("vasimetdata:"))#data=ser.readline()
+    CSN,msg=conv(data)
+    print(data)
+    if msg==b'Carte UL et pas CSN courant ?\r\n':
+        check_csn_liste(CSN) and UL_Card(CSN)#ser.write?
+    if data==b'Velo gare !\r\n':
+        garer(CSN)
+    if msg==b'CSN courant ?\r\n':
+        check_csn_liste(CSN)
+    if msg==b'Velo pris !\r\n':
+        prendre(CSN)"""
+
+
