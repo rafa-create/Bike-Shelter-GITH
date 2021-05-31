@@ -163,4 +163,5 @@ void loop(void) {
       noTone(BUZZER);
       digitalWrite(LED_R, LOW);}
       }
+      delay(500);
 }
