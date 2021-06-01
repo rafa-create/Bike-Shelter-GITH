@@ -1,9 +1,9 @@
 import requests
 import serial, sys
 from xbee import XBee
-#SERIALPORT = "/dev/ttyUSB0"
-#BAUDRATE=57600
-#ser  = serial.Serial(SERIALPORT, BAUDRATE)
+SERIALPORT = "/dev/ttyUSB0"
+BAUDRATE=57600
+ser  = serial.Serial(SERIALPORT, BAUDRATE)
 
 def UL_Card(CSN):#en str
     try:
@@ -103,25 +103,27 @@ def prendre(CSN):
         print ("pas de vélo garé")
 
 def conv(data):
-    #surement prendre les 20 premier caractéres pour le CSN et reste pour le msg 
+    #surement prendre les 20 premier caractéres pour le CSN et reste pour le msg
     CSN="04 4C 40 B2 61 67 80"
-    return CSN,data
+    return CSN,data,place
 
 "04 43 59 B2 61 67 80"
 "04 4C 40 B2 61 67 80"
 "04 33 5B B2 7A 57 80"
-"""
+
 while True:
-    data=input(str("vasimetdata:"))#data=ser.readline()
-    CSN,msg=conv(data)
-    print(data)
+    msg=ser.readline()
+    print(CSN)
     if msg==b'Carte UL et pas CSN courant ?\r\n':
+        CSN=ser.readline()
         check_csn_liste(CSN) and UL_Card(CSN)#ser.write?
     if data==b'Velo gare !\r\n':
+        CSN=ser.readline()
         garer(CSN)
     if msg==b'CSN courant ?\r\n':
         check_csn_liste(CSN)
     if msg==b'Velo pris !\r\n':
-        prendre(CSN)"""
+        CSN=ser.readline()
+        prendre(CSN)
 
 
