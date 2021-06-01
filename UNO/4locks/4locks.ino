@@ -1,102 +1,180 @@
- 
- /*RST/Reset   RST          9             5         D9         RESET/ICSP-5     RST
- * SPI SS      SDA(SS)      10            53        D10        10               10
- * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
- * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14
- * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
- */
- 
-#include <MFRC522.h>//carte
-#include <SPI.h>//carte
- 
-#define SS_PIN 0
-#define RST_PIN 9
-#define LED_G 6 //define green LED pin
+#include <Wire.h> 
+#include <PN532_I2C.h> 
+#include <PN532.h>   // The following files are included in the libraries Installed
+#include <NfcAdapter.h>
+PN532_I2C pn532_i2c(Wire);
+NfcAdapter nfc = NfcAdapter(pn532_i2c);
+
+#define LED_G 13 //define green LED pin
 #define LED_R 4 //define red LED
-#define LED_Y 3 //define Yellow LED
+//#define LED_Y 13 //define blue LED
 #define BUZZER 5 //buzzer pin
-MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+int Relay1 = 2;    
+int lock1=11;
 
-int Relay1 = 8;    
-int lock1=2;
+int Relay2 = 7;    
+int lock2=9;
 
-int Relay2 =10;    
-int lock2=0;
+int Relay3 = 8;    
+int lock3=12;
 
-//int Relay3 = ;    
-//int lock3=;
+int Relay4 = 10;    
+int lock4=3;
 
-//int Relay4 =;    
-//int lock4=;
 
 void setup() 
 {
-  SPI.begin();//Initiate SPI for card reading
-  Serial.begin(57600);   // Initiate a serial communication
-  mfrc522.PCD_Init();   // Initiate MFRC522
+  nfc.begin();
+  Serial.begin(57600);
   pinMode(LED_G, OUTPUT);
   digitalWrite(LED_G, LOW);
   pinMode(LED_R, OUTPUT);
   digitalWrite(LED_R, LOW);
-  pinMode(LED_Y, OUTPUT);
-  digitalWrite(LED_Y, LOW);
+  //pinMode(LED_B, OUTPUT);
+  //digitalWrite(LED_Y, LOW);
   pinMode(BUZZER, OUTPUT);
   noTone(BUZZER);
-  
   pinMode(lock1, INPUT_PULLUP);           
   pinMode(Relay1, OUTPUT); 
-  int statelock1=digitalRead(lock1); 
-  
   pinMode(lock2, INPUT_PULLUP);           
-  pinMode(Relay2, OUTPUT); 
-  int statelock2=digitalRead(lock2); 
-  
-  //pinMode(lock3, INPUT_PULLUP);           
-  //pinMode(Relay3, OUTPUT); 
-  //int statelock3=digitalRead(lock3); 
-  
-  //pinMode(lock4, INPUT_PULLUP);           
-  //pinMode(Relay4, OUTPUT); 
-  //int statelock4=digitalRead(lock4); 
+  pinMode(Relay2, OUTPUT);
+  pinMode(lock3, INPUT_PULLUP);           
+  pinMode(Relay3, OUTPUT); 
+  pinMode(lock4, INPUT_PULLUP);           
+  pinMode(Relay4, OUTPUT); 
 }
 
 void loop() {
+  char static msgPi;
   int statelock1=digitalRead(lock1);
-  static String cardlock1= "nothing";
   int statelock2=digitalRead(lock2);
-  static String cardlock2= "nothing";
+  int statelock3=digitalRead(lock3);
+  //lock1
+  if (statelock1==0){
+    //digitalWrite(LED_B, HIGH); 
+    tone(BUZZER, 600);
+    // Look for new cards to register
+    while ( ! nfc.tagPresent()){}//wait
+    NfcTag tag = nfc.read();
+    Serial.println(tag.getUidString());
+    Serial.println("Student card ?");
+    if (tag.getUidString().length()==20) {
+      good_card_registred();}
+    else   { bad_card_eject(Relay1);}
+      }
+  //lock2
+  if (statelock2==0){
+    //digitalWrite(LED_B, HIGH); 
+    tone(BUZZER, 600);
+    // Look for new cards to register
+     while ( ! nfc.tagPresent()){}//wait
+    NfcTag tag = nfc.read();
+    Serial.println(tag.getUidString());
+    Serial.println("Student card ?");
+    if (tag.getUidString().length()==20) {
+      good_card_registred();
+       cardlock2 = tag.getUidString();
+      }
+    else   {
+      bad_card_eject(Relay2);
+      }
+  }
+  //lock3
+  if (statelock3==0){
+    //digitalWrite(LED_B, HIGH); 
+    tone(BUZZER, 600);
+    // Look for new cards to register
+     while ( ! nfc.tagPresent()){}//wait
+    NfcTag tag = nfc.read();
+    Serial.println(tag.getUidString());
+    Serial.println("Student card ?");
+    if (tag.getUidString().length()==20) {
+      good_card_registred();
+       cardlock3 = tag.getUidString();
+      }
+    else   {
+      bad_card_eject(Relay3);
+      }
+  }
+    //lock4
+    if (statelock4==0){
+    //digitalWrite(LED_B, HIGH); 
+    tone(BUZZER, 600);
+    while ( ! nfc.tagPresent()){}//wait
+    NfcTag tag = nfc.read();
+    Serial.println(tag.getUidString());
+    Serial.println("Student card ?");
+    if (tag.getUidString().length()==20) {
+      good_card_registred();
+      cardlock4=tag.getUidString();}
+    else   { bad_card_eject(Relay4);}
+      }
+     // Look for new cards to take a bike
+      if (nfc.tagPresent()){
+    NfcTag tag = nfc.read();
+    if CSN_courant(tag.getUidString())
+    if (tag.getUidString()==cardlock1) {
+      good_card_ejected(Relay1);
+      }
+    if (tag.getUidString()==cardlock2) {
+      good_card_ejected(Relay2);
+      }
+    if (tag.getUidString()==cardlock3) {
+      good_card_ejected(Relay3);
+      cardlock3="nothing";}
+     if (tag.getUidString()==cardlock4) {
+      good_card_ejected(Relay4);
+      cardlock4="nothing";}
+     else   {
+      bad_card();
+      }
+      delay(500);
+      }
+}
 
-  //int statelock3=digitalRead(lock3);
-  //static String cardlock3= "nothing";
 
-  //int statelock4=digitalRead(lock4);
-  //static String cardlock4= "nothing";
-  
-  if (statelock1==0 && cardlock1== "nothing" ){
 
-    digitalWrite(LED_Y, HIGH); 
-    //tone(BUZZER, 600);
-    // Look for new cards
-    if ( ! mfrc522.PICC_IsNewCardPresent()) { return;}
-    if ( ! mfrc522.PICC_ReadCardSerial()){return;}
-    //Serial.print("Card ID :");
-    String content= "";
-    byte letter;
-    for (byte i = 0; i < mfrc522.uid.size; i++) 
-    {// Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-      //Serial.print(mfrc522.uid.uidByte[i], HEX);
-      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-      content.concat(String(mfrc522.uid.uidByte[i], HEX));}
-    //Serial.println();
-    Serial.print("Student card: ");
-    content.toUpperCase();
-    if (content.substring(1).length() == 20) {
-      cardlock1 = content.substring(1);
-      digitalWrite(LED_Y, LOW); 
+void CSN_courant(String CSN){
+    Serial.print("CSN courant ?");
+    if(Serial.available()>0)
+    { msgPi=char(Serial.read());
+    Serial.write(Serial.read());}
+    return msgPi
+ }
+
+void UL_et_non_courant(String CSN){
+    Serial.print("Carte UL et pas CSN courant ?");
+    if(Serial.available()>0)
+    { msgPi=char(Serial.read());
+    Serial.write(Serial.read());}
+    return msgPi
+}
+void bad_card_eject(int Relay){
+      //digitalWrite(LED_B, LOW); 
       noTone(BUZZER);
-      digitalWrite(LED_Y, LOW);
-      Serial.println(" Yes, so registred a this lock");
-      //Serial.println();
+      digitalWrite(LED_R, HIGH);          
+      tone(BUZZER, 300);
+      delay(500);
+      noTone(BUZZER);
+      digitalWrite(Relay, HIGH); 
+      delay(1000);
+      digitalWrite(Relay, LOW);
+      digitalWrite(LED_R, LOW);
+      Serial.println("Pas carte UL ou dans CSN courant donc verrou éjécté");
+    }
+
+void bad_card(){
+      digitalWrite(LED_R, HIGH);          
+      tone(BUZZER, 300);
+      delay(500);
+      noTone(BUZZER);
+      digitalWrite(LED_R, LOW);
+      Serial.println("Tu n'as pas de vélo garé désolé");
+     }
+
+ void good_card_registred(){
+      noTone(BUZZER);
+      //digitalWrite(LED_B, LOW);
       delay(500);
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
@@ -104,54 +182,17 @@ void loop() {
       noTone(BUZZER);
       delay(3000);
       digitalWrite(LED_G, LOW);
-      }
-    else   {
-      digitalWrite(LED_Y, LOW);
-      noTone(BUZZER);
-      Serial.println(" No, so lock ejected");
-      //Serial.println();
-      digitalWrite(LED_R, HIGH);          
-      tone(BUZZER, 300);
-      delay(1000);
-      noTone(BUZZER);
-      digitalWrite(Relay1, HIGH); 
-      delay(2000);
-      digitalWrite(Relay1, LOW);
-      digitalWrite(LED_R, LOW);
-      }
-    }
-      // Look for new cards
-    if ( ! mfrc522.PICC_IsNewCardPresent()) { return;}
-    if ( ! mfrc522.PICC_ReadCardSerial()){return;}
-    //Serial.print("ID card:");
-    String content="";
-    byte letter;
-    for (byte i = 0; i < mfrc522.uid.size; i++) 
-    { //Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-      //Serial.print(mfrc522.uid.uidByte[i], HEX);
-      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-      content.concat(String(mfrc522.uid.uidByte[i], HEX));}
-    //Serial.println();
-    Serial.print("Do you have a bike locked ?");
-    content.toUpperCase();
-    if (content.substring(1) ==cardlock1) {
-      Serial.println(" Yes, so lock ejected");
-      //Serial.println();
+      Serial.println("Velo gare !");
+ }
+
+void good_card_ejected(int Relay)
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
       delay(300);
       noTone(BUZZER);
-      digitalWrite(Relay1, HIGH); 
-      delay(2000);
-      digitalWrite(Relay1, LOW);
-      digitalWrite(LED_G, LOW);
-      cardlock1= "nothing";}
-     else   {
-      Serial.println(" No");
-      //Serial.println();
-      digitalWrite(LED_R, HIGH);          
-      tone(BUZZER, 300);
+      digitalWrite(Relay, HIGH); 
       delay(1000);
-      noTone(BUZZER);
-      digitalWrite(LED_R, LOW);}
+      digitalWrite(Relay, LOW);
+      digitalWrite(LED_G, LOW);
+      Serial.println("Velo pris !");
 }
