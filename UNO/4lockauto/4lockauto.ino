@@ -134,7 +134,7 @@ void loop() {
      else   {
       bad_card();
       }
-      delay(500);
+      delay(500);//tester sans
       }
 }
 
