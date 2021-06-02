@@ -180,10 +180,9 @@ void good_card_ejected(int Relay){
 }
 void wait(void){
     digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 100);
     while ( ! nfc.tagPresent()){
       tone(BUZZER, 100);
-      delay(100);
+      delay(200);
       noTone(BUZZER);
       }
 }
