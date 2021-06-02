@@ -17,7 +17,7 @@ def UL_Card(CSN):#en str
         response = requests.request("GET", url, headers=headers, data=payload)
         return response.status_code==200
     except requests.exceptions.RequestException as e :
-        print("Pas de check de CSN effectué")
+        print("Pas de check de CSN effectu�")
         return True
 def update_fichier_et_online(Ap):
     try :
@@ -34,16 +34,12 @@ def update_fichier_et_online(Ap):
         print(response.text)
     except requests.exceptions.RequestException as e :
         #ConnectionError
-        print("Mise en ligne non effectuée")
+        print("Mise en ligne non effectu�e")
 def recup_App():
     global Ap
     f = open('/home/pi/Desktop/App.txt','r')
     Ap = f.read()
     Ap=int(str(Ap))
-    if Ap<0:
-        Ap=0
-    if Ap>4:
-        Ap=4
     f.close()
     
 
@@ -70,9 +66,10 @@ def sup_csn_liste(CSN):
             else:
                 if line.strip("\n") != CSN:
                     f.write(line)
+                    break
             #else:
-                #return("CSN supprimé")
-        #return ("Pas le CSN")#arrive pas là normalement
+                #return("CSN supprim�")
+        #return ("Pas le CSN")#arrive pas l� normalement
         f.close()
 def ajouter_csn(CSN):
     f = open('/home/pi/Desktop/cartes.txt',"a+")
@@ -82,9 +79,11 @@ def ajouter_csn(CSN):
 
 def garer(CSN):
     global Ap
-    if UL_Card(CSN) and not check_csn_liste(CSN):
+    if True :
         recup_App()
         Ap-=1
+        if Ap<0:
+            Ap=0
         update_fichier_et_online(Ap)
         ajouter_csn(CSN)
         print ("Place prise")
@@ -93,32 +92,31 @@ def garer(CSN):
 
 def prendre(CSN):
     global Ap
-    if check_csn_liste(CSN):
+    if True:
         recup_App()
         Ap+=1
+        if Ap>4:
+            Ap=4
         update_fichier_et_online(Ap)
         sup_csn_liste(CSN)
-        print ("Place libérée")
+        print ("Place lib�r�e")
     else:
-        print ("pas de vélo garé")
+        print ("pas de v�lo gar�")
 
-def conv(data):
-    #surement prendre les 20 premier caractéres pour le CSN et reste pour le msg 
-    CSN="04 4C 40 B2 61 67 80"
-    return CSN,data
+def conv(CSN):
+    #surement prendre les 20 premier caract�res pour le CSN et reste pour le msg 
+    CSN=str(CSN,'utf-8')
+    CSN=CSN.rstrip()
+    return CSN
 
 while True:
     msg=ser.readline()
     print(msg)
     if msg==b'Velo gare !\r\n':
-        recup_App()
-        Ap-=1
-        update_fichier_et_online(Ap)
+        CSN=conv(ser.readline())
+        garer(CSN)
     if msg==b'Velo pris !\r\n':
-        CSN=ser.readline().rstrip()
-        print(CSN)
+        CSN=conv(ser.readline())
         prendre(CSN)
-        """recup_App()
-        Ap+=1
-        update_fichier_et_online(Ap)"""
         
+
