@@ -7,7 +7,7 @@ NfcAdapter nfc = NfcAdapter(pn532_i2c);
 
 #define LED_G 13 //define green LED pin
 #define LED_R 4 //define red LED
-//#define LED_Y 13 //define blue LED
+#define LED_B 6 //define blue LED
 #define BUZZER 5 //buzzer pin
 int Relay1 = 2;    
 int lock1=11;
@@ -30,8 +30,8 @@ void setup()
   digitalWrite(LED_G, LOW);
   pinMode(LED_R, OUTPUT);
   digitalWrite(LED_R, LOW);
-  //pinMode(LED_B, OUTPUT);
-  //digitalWrite(LED_Y, LOW);
+  pinMode(LED_B, OUTPUT);
+  digitalWrite(LED_B, LOW);
   pinMode(BUZZER, OUTPUT);
   noTone(BUZZER);
   pinMode(lock1, INPUT_PULLUP);           
@@ -55,10 +55,7 @@ void loop() {
   static String cardlock4= "nothing";
   //lock1
   if (statelock1==0 && cardlock1== "nothing"){
-    //digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    // Look for new cards to register
-    while ( ! nfc.tagPresent()){}//wait
+    wait();
     NfcTag tag = nfc.read();
     if (tag.getUidString().length()==20) {
       good_card_registred();
@@ -69,9 +66,7 @@ void loop() {
       }
   //lock2
   if (statelock2==0 && cardlock2== "nothing"){
-    //digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
+    wait();
     NfcTag tag = nfc.read();
     if (tag.getUidString().length()==20) {
       good_card_registred();
@@ -84,9 +79,7 @@ void loop() {
   }
   //lock3
   if (statelock3==0 && cardlock3== "nothing"){
-    //digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
+    wait();
     NfcTag tag = nfc.read();
     if (tag.getUidString().length()==20) {
       good_card_registred();
@@ -99,9 +92,7 @@ void loop() {
   }
    //lock4
   if (statelock4==0 && cardlock4== "nothing"){
-    //digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
+    wait();
     NfcTag tag = nfc.read();
     if (tag.getUidString().length()==20) {
       good_card_registred();
@@ -109,7 +100,6 @@ void loop() {
       Serial.println(tag.getUidString());}
     else   { bad_card_eject(Relay4);}
       }
-   // Look for new cards to take a bike
     if (nfc.tagPresent()){
     NfcTag tag = nfc.read();
     if (tag.getUidString()==cardlock1) {
@@ -134,7 +124,7 @@ void loop() {
      else   {
       bad_card();
       }
-      delay(500);//tester sans
+      //delay(500);
       }
 }
 
@@ -142,14 +132,15 @@ void loop() {
 
 
 void bad_card_eject(int Relay){
-      //digitalWrite(LED_B, LOW); 
+      digitalWrite(LED_B, LOW); 
       noTone(BUZZER);
+      delay(50);
       digitalWrite(LED_R, HIGH);          
       tone(BUZZER, 300);
       delay(500);
       noTone(BUZZER);
       digitalWrite(Relay, HIGH); 
-      delay(1000);
+      delay(900);
       digitalWrite(Relay, LOW);
       digitalWrite(LED_R, LOW);
       Serial.println("Pas carte UL ou dans CSN courant donc verrou éjécté");
@@ -166,13 +157,12 @@ void bad_card(){
 
  void good_card_registred(){
       noTone(BUZZER);
-      //digitalWrite(LED_B, LOW);
-      delay(500);
+      digitalWrite(LED_B, LOW);
+      delay(50);
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
-      delay(300);
+      delay(500);
       noTone(BUZZER);
-      delay(3000);
       digitalWrite(LED_G, LOW);
       Serial.println("Velo gare !");
  }
@@ -180,11 +170,20 @@ void bad_card(){
 void good_card_ejected(int Relay){
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
-      delay(300);
+      delay(500);
       noTone(BUZZER);
       digitalWrite(Relay, HIGH); 
-      delay(1000);
+      delay(900);
       digitalWrite(Relay, LOW);
       digitalWrite(LED_G, LOW);
       Serial.println("Velo pris !");
+}
+void wait(void){
+    digitalWrite(LED_B, HIGH); 
+    tone(BUZZER, 100);
+    while ( ! nfc.tagPresent()){
+      tone(BUZZER, 100);
+      delay(100);
+      noTone(BUZZER);
+      }
 }
