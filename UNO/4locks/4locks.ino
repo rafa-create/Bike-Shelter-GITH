@@ -1,3 +1,6 @@
+//idées : fct setup qui initialise les varibles au démarage à partir du pi puis mode auto en continuant de mettre à j les cartes sur le pi
+//hybrid si jamais plus de co avec le pi
+//mémoire physique ajoutée sur l'arduino
 #include <Wire.h> 
 #include <PN532_I2C.h> 
 #include <PN532.h>   // The following files are included in the libraries Installed
@@ -50,78 +53,32 @@ void loop() {
   int statelock2=digitalRead(lock2);
   int statelock3=digitalRead(lock3);
   //lock1
-  if (statelock1==0){
-    digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
+  if (statelock1==0 && """FCT1 nobody at this lock (faire en sorte de pas aller chercher par radio){
+    wait();
     NfcTag tag = nfc.read();
-    Serial.println(tag.getUidString());
-    Serial.println("Student card ?");
-    if (tag.getUidString().length()==20) {
-      good_card_registred();}
+    if () {
+      good_card_registred();
+      Serial.println(tag.getUidString());//card added on the Pi
+      }
     else   { bad_card_eject(Relay1);}
       }
   //lock2
-  if (statelock2==0){
-    digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
-    NfcTag tag = nfc.read();
-    Serial.println(tag.getUidString());
-    Serial.println("Student card ?");
-    if (tag.getUidString().length()==20) {
-      good_card_registred();
-       cardlock2 = tag.getUidString();
-      }
-    else   {
-      bad_card_eject(Relay2);
-      }
-  }
+ 
   //lock3
-  if (statelock3==0){
-    digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-     while ( ! nfc.tagPresent()){}//wait
-    NfcTag tag = nfc.read();
-    Serial.println(tag.getUidString());
-    Serial.println("Student card ?");
-    if (tag.getUidString().length()==20) {
-      good_card_registred();
-       cardlock3 = tag.getUidString();
-      }
-    else   {
-      bad_card_eject(Relay3);
-      }
-  }
-    //lock4
-    if (statelock4==0){
-    digitalWrite(LED_B, HIGH); 
-    tone(BUZZER, 600);
-    while ( ! nfc.tagPresent()){}//wait
-    NfcTag tag = nfc.read();
-    Serial.println(tag.getUidString());
-    Serial.println("Student card ?");
-    if (tag.getUidString().length()==20) {
-      good_card_registred();
-      cardlock4=tag.getUidString();}
-    else   { bad_card_eject(Relay4);}
-      }
+ 
+   //lock4
+  
     //card passed
       if (nfc.tagPresent()){
     NfcTag tag = nfc.read();
-    if CSN_courant(tag.getUidString())
-    if (tag.getUidString()==cardlock1) {
+    if ("""FCT3 num carte pour lock1) {
       good_card_ejected(Relay1);
+      Serial.println(lock1)//???
+      Serial.println(tag.getUidString());//card lock1 deleted on the Pi
       }
-    if (tag.getUidString()==cardlock2) {
-      good_card_ejected(Relay2);
-      }
-    if (tag.getUidString()==cardlock3) {
-      good_card_ejected(Relay3);
-      cardlock3="nothing";}
-     if (tag.getUidString()==cardlock4) {
-      good_card_ejected(Relay4);
-      cardlock4="nothing";}
+    else if 2
+    else if 3
+    else if 4
      else   {
       bad_card();
       }
@@ -139,22 +96,24 @@ void CSN_courant(String CSN){
     return msgPi
  }
 
-void UL_et_non_courant(String CSN){
+void UL_et_non_courant(string CSN){
     Serial.print("Carte UL et pas CSN courant ?");
     if(Serial.available()>0)
     { msgPi=char(Serial.read());
     Serial.write(Serial.read());}
     return msgPi
 }
+
 void bad_card_eject(int Relay){
       digitalWrite(LED_B, LOW); 
       noTone(BUZZER);
+      delay(50);
       digitalWrite(LED_R, HIGH);          
       tone(BUZZER, 300);
       delay(500);
       noTone(BUZZER);
       digitalWrite(Relay, HIGH); 
-      delay(1000);
+      delay(900);
       digitalWrite(Relay, LOW);
       digitalWrite(LED_R, LOW);
       Serial.println("Pas carte UL ou dans CSN courant donc verrou éjécté");
@@ -172,24 +131,30 @@ void bad_card(){
  void good_card_registred(){
       noTone(BUZZER);
       digitalWrite(LED_B, LOW);
+      delay(50);
+      digitalWrite(LED_G, HIGH);
+      tone(BUZZER, 500);
       delay(500);
-      digitalWrite(LED_G, HIGH);
-      tone(BUZZER, 500);
-      delay(300);
       noTone(BUZZER);
-      delay(3000);
       digitalWrite(LED_G, LOW);
-      Serial.println("Velo gare !");
+      Serial.println("Velo gare !");//Website updated
  }
-
-void good_card_ejected(int Relay)
+void good_card_ejected(int Relay){
       digitalWrite(LED_G, HIGH);
       tone(BUZZER, 500);
-      delay(300);
+      delay(500);
       noTone(BUZZER);
       digitalWrite(Relay, HIGH); 
-      delay(1000);
+      delay(900);
       digitalWrite(Relay, LOW);
       digitalWrite(LED_G, LOW);
-      Serial.println("Velo pris !");
+      Serial.println("Velo pris !");//website updated
+}
+void wait(void){
+    digitalWrite(LED_B, HIGH); 
+    while ( ! nfc.tagPresent()){
+      tone(BUZZER, 100);
+      delay(200);
+      noTone(BUZZER);
+      }
 }
