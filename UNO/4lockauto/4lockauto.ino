@@ -106,22 +106,23 @@ void loop() {
     if (tag.getUidString()==cardlock1) {
       good_card_ejected(Relay1);
       cardlock1="nothing";
-      Serial.println(tag.getUidString());
+      Serial.println(tag.getUidString());//card lock1 deleted on the Pi
       }
       else if (tag.getUidString()==cardlock2) {
       good_card_ejected(Relay2);
       cardlock2="nothing";
-      Serial.println(tag.getUidString());
+      Serial.println(tag.getUidString());//card lock2 deleted on the Pi
       }
       else if (tag.getUidString()==cardlock3) {
       good_card_ejected(Relay3);
       cardlock3="nothing";
-      Serial.println(tag.getUidString());
+      Serial.println(tag.getUidString());//card lock3 deleted on the Pi
       }
      else if (tag.getUidString()==cardlock4) {
       good_card_ejected(Relay4);
       cardlock4="nothing";
-      Serial.println(tag.getUidString());}
+      Serial.println(tag.getUidString());//card lock4 deleted on the Pi
+     }
      else   {
       bad_card();
       }
@@ -165,7 +166,7 @@ void bad_card(){
       delay(500);
       noTone(BUZZER);
       digitalWrite(LED_G, LOW);
-      Serial.println("Velo gare !");
+      Serial.println("Velo gare !");//Website updated
  }
 
 void good_card_ejected(int Relay){
@@ -177,7 +178,7 @@ void good_card_ejected(int Relay){
       delay(900);
       digitalWrite(Relay, LOW);
       digitalWrite(LED_G, LOW);
-      Serial.println("Velo pris !");
+      Serial.println("Velo pris !");//website updated
 }
 void wait(void){
     digitalWrite(LED_B, HIGH); 
