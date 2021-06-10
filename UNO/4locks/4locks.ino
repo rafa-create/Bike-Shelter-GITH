@@ -1,4 +1,5 @@
-//idées : fct setup qui initialise les varibles au démarage à partir du pi puis mode auto en continuant de mettre à j les cartes sur le pi
+//idées : variable dans la mémoire de l'arduino https://www.developpez.net/forums/d1794325/general-developpement/programmation-systeme/embarque/arduino/garder-variable-memoire-apres-coupure-d-alimentation/ https://www.arduino.cc/en/Reference/EEPROM (pas oublier verif carte UL)
+//fct setup qui initialise les varibles au démarage à partir du pi puis mode auto en continuant de mettre à j les cartes sur le pi
 //hybrid si jamais plus de co avec le pi
 //mémoire physique ajoutée sur l'arduino
 #include <Wire.h> 
