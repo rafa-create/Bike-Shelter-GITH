@@ -100,6 +100,7 @@ void loop() {
       Serial.println(tag.getUidString());}
     else   { bad_card_eject(Relay4);}
       }
+  //card passed
     if (nfc.tagPresent()){
     NfcTag tag = nfc.read();
     if (tag.getUidString()==cardlock1) {
