@@ -42,7 +42,7 @@ body {
 html,body, #map {
     margin:0.5px;
     z-index: 0;
-    height: 94.5%;
+    height: 95.5%;
 }
 header, a.big-title {
     color: black;
