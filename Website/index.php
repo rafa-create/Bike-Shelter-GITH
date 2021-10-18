@@ -1,10 +1,3 @@
-<?php
-//require_once 'Place.php';
-$Aplaces=file_get_contents(__DIR__.DIRECTORY_SEPARATOR."places.txt");
-$heures= date('H')+2 ;
-$minutes=date('i');
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -77,7 +70,8 @@ $minutes=date('i');
             }
             window.onload = function(){
 		    initMap(); 
-            };
+            }
+            ;
     </script>
 </body>
 </html>
